@@ -1,0 +1,238 @@
+﻿{% load static %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Garrix</title>
+    <meta name="keywords" content="blog"/>
+    <meta name="description" content="blog"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <link href="{% static 'css/m.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-1.8.3.min.js' %}"></script>
+    <script src="{% static 'js/comm.js' %}"></script>
+    <!--[if lt IE 9]>
+    <script src="{% static 'js/modernizr.js' %}"></script>
+    <![endif]-->
+    </body>
+</head>
+<body>
+<!--top begin-->
+<header id="header">
+    <div class="navbox">
+        <h2 id="mnavh"><span class="navicon"></span></h2>
+        <div class="logo"><a href="#">Garrix Blog</a></div>
+        <nav>
+            <ul id="starlist">
+                <li><a href="/post">博客</a></li>
+                <li class="menu"><a href="list2.html">练习题</a>
+                    <ul class="sub">
+                        <li><a href="">XX</a></li>
+                        <li><a href="">XX</a></li>
+                    </ul>
+                    <span></span></li>
+                <li><a href="about.html">关于我</a></li>
+            </ul>
+        </nav>
+        <div class="searchico"></div>
+    </div>
+</header>
+<div class="searchbox">
+    <div class="search">
+        <form action="/search/" method="get" name="searchform" id="searchform">
+            <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词"
+                   style="color: rgb(153, 153, 153);"
+                   onFocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}"
+                   onBlur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
+            <input name="show" value="title" type="hidden">
+            <input name="tempid" value="1" type="hidden">
+            <input name="tbname" value="news" type="hidden">
+            <input name="q" class="input_submit" value="搜索" type="submit">
+        </form>
+    </div>
+    <div class="searchclose"></div>
+</div>
+<!--top end-->
+<article>
+    <!--lbox begin-->
+    <div class="lbox">
+        <!--banbox begin-->
+        {#        <div class="banbox">#}
+        {#            <div class="banner">#}
+        {#                <div id="banner" class="fader">#}
+        {#                    <li class="slide"><a href="/" target="_blank"><img src="{% static 'images/1.jpg' %}"></a></li>#}
+        {#                    <li class="slide"><a href="/" target="_blank"><img src="{% static 'images/2.jpg' %}"></a></li>#}
+        {#                    <li class="slide"><a href="/" target="_blank"><img src="{% static 'images/3.jpg' %}"></a></li>#}
+        {#                    <li class="slide"><a href="/" target="_blank"><img src="{% static 'images/4.jpg' %}"></a></li>#}
+        {#                    <div class="fader_controls">#}
+        {#                        <div class="page prev" data-target="prev"></div>#}
+        {#                        <div class="page next" data-target="next"></div>#}
+        {#                        <ul class="pager_list">#}
+        {#                        </ul>#}
+        {#                    </div>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+        <!--banbox end-->
+        <!--headline begin-->
+        {#        <div class="headline">#}
+        {#            <ul>#}
+        {#                <li><a href="/" title="为什么说10月24日是程序员的节日？"><img src="{% static 'images/h1.jpg' %}"#}
+        {#                                                                             alt="为什么说10月24日是程序员的节日？"><span>为什么说10月24日是程序员的节日？</span></a>#}
+        {#                </li>#}
+        {#                <li><a href="/" title="个人网站做好了，百度不收录怎么办？来，看看他们怎么做的"><img#}
+        {#                        src="{% static 'images/h2.jpg' %}"#}
+        {#                        alt="个人网站做好了，百度不收录怎么办？来，看看他们怎么做的。"><span>个人网站做好了，百度不收录怎么办？来，看看他们怎么做的。</span></a>#}
+        {#                </li>#}
+        {#            </ul>#}
+        {#        </div>#}
+        <!--headline end-->
+        <div class="clearblank"></div>
+
+        <!--tab_box end-->
+        <div class="whitebg bloglist">
+            <h2 class="htitle">最新博文</h2>
+            <ul>
+                {% for article in article_list %}
+                    <li>
+                        <h3 class="blogtitle">
+                            <a href="/post/read/{{ article.id }}" target="_blank">{{ article.title }}</a></h3>
+                        <span class="blogpic imgscale">
+                            <i><a href="/">{{ article.category.cname }}</a></i>
+                            <a href="/post/read/{{ article.id }}" title=""><img src="{% static 'images/b01.jpg' %}"
+                                                                                alt=""></a>
+                        </span>
+                        <p class="blogtext">{{ article.describe }}</p>
+                        <p class="bloginfo" style="margin-top: 20px">
+
+                            {% for tag in article.tag.all %}
+                                <span># {{ tag.tname }}</span>
+                            {% endfor %}
+                            <br/>
+                            <i class="avatar"><img src="{% static 'images/avatar.jpg' %}"></i>
+                            <span>发布日期：{{ article.created }}</span>
+                        </p>
+
+                        <a href="/post/read/{{ article.id }}" class="viewmore">阅读全文</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <!--pagelist-->
+            <div class="pagelist">
+                <a href="/post/page/{{ first_page_number }}">首页</a>
+                {% if article_list.has_previous %}
+                    <a href="/post/page/{{ article_list.previous_page_number }}">上一页</a>&nbsp;
+                {% endif %}
+                {% for num in  page_range %}
+                    {% if page_number == num %}
+                        <a href="/post/page/{{ num }}" style="color: #007aff">{{ num }}</a>&nbsp;
+                    {% else %}
+                        <a href="/post/page/{{ num }}">{{ num }}</a>&nbsp;
+                    {% endif %}
+                {% endfor %}
+                {% if article_list.has_next %}
+                    <a href="/post/page/{{ article_list.next_page_number }}">下一页</a>&nbsp;
+                {% endif %}
+                <a href="/post/page/{{ last_page_number }}">尾页</a>
+            </div>
+            <!--pagelist end-->
+        </div>
+        <!--bloglist end-->
+    </div>
+    <div class="rbox">
+        {#        <div class="card">#}
+        {#            <h2>我的名片</h2>#}
+        {#            <p>网名：Garrix</p>#}
+        {#            <p>职业：Coder</p>#}
+        {#            <p>现居：保密</p>#}
+        {#            <p>Email：1044998299@qq.com</p>#}
+        {#            <ul class="linkmore">#}
+        {#                <li><a href="/" target="_blank" class="iconfont icon-zhuye" title="网站地址"></a></li>#}
+        {#                <li><a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=HHh9cn95b3F1cHVye1xtbTJ-c3E"#}
+        {#                       target="_blank" class="iconfont icon-youxiang" title="我的邮箱"></a></li>#}
+        {#                <li><a href="http://wpa.qq.com/msgrd?v=3&uin=476847113&site=qq&menu=yes" target="_blank"#}
+        {#                       class="iconfont icon---" title="QQ联系我"></a></li>#}
+        {#                <li id="weixin"><a href="#" target="_blank" class="iconfont icon-weixin"#}
+        {#                                   title="关注我的微信"></a><i><img src="{% static 'images/wx.png' %}"></i></li>#}
+        {#            </ul>#}
+        {#        </div>#}
+        <div class="whitebg wenzi">
+            <h2 class="htitle">分类</h2>
+            <ul>
+                {% for rc in right_category %}
+                    <li>
+                        <a href="/post/category/{{ rc.category }}">{{ rc.category__cname }}</a>
+                        <span>({{ rc.c }})</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="whitebg paihang">
+            <h2 class="htitle">近期文章</h2>
+            <ul>
+                <ul>
+                    {% for rl in right_latest %}
+                        <li><i></i><a href="/post/read/{{ rl.id }}">{{ rl.title }}</a></li>
+                    {% endfor %}
+                </ul>
+        </div>
+
+
+        <div class="whitebg wenzi">
+            <h2 class="htitle">归档</h2>
+            <ul>
+                {% for rd in right_date %}
+                    <li>
+                        <a href="/post/archive/{{ rd.month|date:"Y" }}/{{ rd.month|date:"m" }}">{{ rd.month|date:"Y年m月" }}<span>（{{ rd.count }}）</span></a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="whitebg tongji">
+            <h2 class="htitle">站点信息</h2>
+            <ul>
+                <li><b>建站时间</b>：2024 年 1 月 20 日</li>
+                <li><b>文章统计</b>：{{ article_counts }} 篇</li>
+                <li><b>文章评论</b>：无</li>
+                <li><b>微信公众号</b>：扫描二维码，关注我</li>
+                <img src="{% static 'images/wxgzh.jpg' %}" class="tongji_gzh">
+            </ul>
+        </div>
+
+    </div>
+</article>
+<footer>
+    <div class="box">
+        <div class="wxbox">
+            <ul>
+                <li><img src="{% static 'images/wxgzh.jpg' %}"><span>微信公众号</span></li>
+                <li><img src="{% static 'images/wx.png' %}"><span>我的微信</span></li>
+            </ul>
+        </div>
+        <div class="endnav">
+            <p><b>站点声明：</b></p>
+            <p>1、本站个人博客模板，均为XXX本人设计，个人可以使用，但是未经许可不得用于任何商业目的。</p>
+            <p>2、所有文章未经授权禁止转载、摘编、复制或建立镜像，如有违反，追究法律责任。</p>
+            <p>Copyright © <a href="/" target="_blank">XXX</a> All Rights Reserved. </p>
+        </div>
+    </div>
+    <a href="#">
+        <div class="top"></div>
+    </a></footer>
+<style>
+    .copyrights {
+        text-indent: -9999px;
+        height: 0;
+        line-height: 0;
+        font-size: 0;
+        overflow: hidden;
+    }
+</style>
+<div class="copyrights" id="links20210126">
+    Collect from <a href="http://www.cssmoban.com/" title="网站模板">模板之家</a>
+    <a href="http://cooco.net.cn/" title="组卷网">组卷网</a>
+</div>
+</body>
+</html>

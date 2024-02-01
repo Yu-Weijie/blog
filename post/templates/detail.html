@@ -1,0 +1,170 @@
+{% load static %}
+{% load markdownfilter %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="keywords" content="blog"/>
+    <meta name="description" content="blog"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'prism/prism.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'prism/prism.css' %}">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <link href="{% static 'css/m.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-1.8.3.min.js' %}"></script>
+    <script src="{% static 'js/comm.js' %}"></script>
+    <!--[if lt IE 9]>
+<script src="{% static 'js/modernizr.js' %}"></script>
+<![endif]-->
+</head>
+<body>
+<!--top begin-->
+<header id="header">
+    <div class="navbox">
+        <h2 id="mnavh"><span class="navicon"></span></h2>
+        <div class="logo"><a href="#">Garrix Blog</a></div>
+        <nav>
+            <ul id="starlist">
+                <li><a href="/post">博客</a></li>
+                <li class="menu"><a href="list2.html">练习题</a>
+                    <ul class="sub">
+                        <li><a href="">XX</a></li>
+                        <li><a href="">XX</a></li>
+                    </ul>
+                    <span></span></li>
+                <li><a href="about.html">关于我</a></li>
+            </ul>
+        </nav>
+        <div class="searchico"></div>
+    </div>
+</header>
+<div class="searchbox">
+    <div class="search">
+        <form action="/e/search/index.php" method="post" name="searchform" id="searchform">
+            <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词"
+                   style="color: rgb(153, 153, 153);"
+                   onFocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}"
+                   onBlur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
+            <input name="show" value="title" type="hidden">
+            <input name="tempid" value="1" type="hidden">
+            <input name="tbname" value="news" type="hidden">
+            <input name="Submit" class="input_submit" value="搜索" type="submit">
+        </form>
+    </div>
+    <div class="searchclose"></div>
+</div>
+<!--top end-->
+<article>
+    <!--lbox begin-->
+    <div class="lbox">
+        <div class="content_box whitebg">
+            <h2 class="htitle"><span class="con_nav">您现在的位置是：<a href="/post">/ 博客</a> / {{ article_detail.title }}</span>文章详情
+            </h2>
+            <h1 class="con_tilte">{{ article_detail.title }}</h1>
+            <p class="bloginfo"><i class="avatar"><img
+                    src="{% static 'images/avatar.jpg' %}"></i><span>发布日期：{{ article_detail.created }}</span><span>【{{ article_detail.category }}】</span>
+            </p>
+            <p class="con_info"><b>简介</b>{{ article_detail.describe }}</p>
+            <div class="con_text">
+                <p>{{ article_detail.content|md|safe }}</p>
+                <p class="share"><b>转载：</b>感谢您对平台的认可，以及对我们文章的青睐，非常欢迎各位朋友分享到个人站点或朋友圈，但转载请说明文章出处“Garrix的个人博客”。
+                </p>
+                <p><span class="diggit">很赞哦！ (74)</span></p>
+                <div class="nextinfo">
+                    {% if previous_article %}
+                        <p>上一篇：<a href="/post/read/{{ previous_article.id }}">{{ previous_article.title }}</a></p>
+                    {% else %}
+                        <p>上一篇：当前为第一篇文章</p>
+                    {% endif %}
+                    {% if next_article %}
+                        <p>下一篇：<a href="/post/read/{{ next_article.id }}">{{ next_article.title }}</a></p>
+                    {% else %}
+                        <p>下一篇：当前为最后一篇文章</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="whitebg">
+            <h2 class="htitle">相关文章</h2>
+            <ul class="otherlink">
+                <li><a href=""
+                       title="">XXXX</a></li>
+                <li><a href=""
+                       title="">XXXX</a></li>
+                <li><a href=""
+                       title="">XXXX</a></li>
+                <li><a href="" title="">XXXX</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="whitebg gbook">
+            <h2 class="htitle">文章评论</h2>
+            <ul>
+            </ul>
+        </div>
+    </div>
+    <!--lbox end-->
+    <div class="rbox">
+        <div class="whitebg cloud">
+            <h2 class="htitle">标签云</h2>
+            <ul>
+                {% for tag in article_detail.tag.all %}
+                    <a href="" target="_blank">{{ tag }}</a>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="whitebg wenzi">
+            <h2 class="htitle">猜你喜欢</h2>
+            <ul>
+                {% for recommend_article in recommend_articles %}
+                    <li><a href="/post/read/{{ recommend_article.id }}">{{ recommend_article.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="whitebg paihang">
+            <h2 class="htitle">近期文章</h2>
+            <ul>
+                <ul>
+                    {% for rl in right_latest %}
+                        <li><i></i><a href="/post/read/{{ rl.id }}">{{ rl.title }}</a></li>
+                    {% endfor %}
+                </ul>
+        </div>
+
+
+        <div class="whitebg tongji">
+            <h2 class="htitle">站点信息</h2>
+            <ul>
+                <li><b>建站时间</b>：2024 年 1 月 20 日</li>
+                <li><b>文章统计</b>：{{ article_counts }} 篇</li>
+                <li><b>文章评论</b>：无</li>
+                <li><b>微信公众号</b>：扫描二维码，关注我</li>
+                <img src="{% static 'images/wxgzh.jpg' %}" class="tongji_gzh">
+            </ul>
+        </div>
+    </div>
+</article>
+<footer>
+    <div class="box">
+        <div class="wxbox">
+            <ul>
+                <li><img src="{% static 'images/wxgzh.jpg' %}"><span>微信公众号</span></li>
+                <li><img src="{% static 'images/wx.png' %}"><span>我的微信</span></li>
+            </ul>
+        </div>
+        <div class="endnav">
+            <p><b>站点声明：</b></p>
+            <p>1、本站个人博客模板，均为XXX本人设计，个人可以使用，但是未经许可不得用于任何商业目的。</p>
+            <p>2、所有文章未经授权禁止转载、摘编、复制或建立镜像，如有违反，追究法律责任。</p>
+            <p>Copyright © <a href="/" target="_blank">XXX</a> All Rights Reserved. </p>
+        </div>
+    </div>
+    <a href="#">
+        <div class="top"></div>
+    </a></footer>
+</body>
+</html>
